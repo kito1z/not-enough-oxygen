@@ -1,0 +1,5 @@
+{
+  "item.not_enough_oxygen.oxygen_tank": "Кислородный балон",
+  "effect.not_enough_oxygen.oxygen_saturation": "Кислородное насыщение",
+  "block.not_enough_oxygen.vent": "Вентиляция"
+}

@@ -1,0 +1,15 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "com.kito1z.not_enough_oxygen.mixin",
+  "compatibilityLevel": "JAVA_8",
+  "refmap": "not_enough_oxygen.refmap.json",
+  "mixins": [
+    "NEOPlayerMixin"
+  ],
+  "client": [
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
