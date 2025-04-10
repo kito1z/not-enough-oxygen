@@ -68,7 +68,7 @@ public class VentBlockEntity extends BlockEntity {
                 boolean vsLogicSuccess = NotEnoughOxygen.ModsLoaded.VS && VSCompat.applyOxygenToVSPlayer(player, pos, entity.hermeticArea);
                 if(!vsLogicSuccess){
                     Vec3 eyePos = player.getEyePosition();
-                    BlockPos eyeBlockPos = new BlockPos((int)eyePos.x,(int)eyePos.y,(int)eyePos.z);
+                    BlockPos eyeBlockPos = new BlockPos((int)Math.floor(eyePos.x),(int)Math.floor(eyePos.y),(int)Math.floor(eyePos.z));
                     if(entity.hermeticArea.getArea().contains(eyeBlockPos)) player.addEffect(new MobEffectInstance(NEOEffects.OXYGEN_SATURATION.get(), 5, 0, false, false));;
                 }
             }
