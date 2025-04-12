@@ -59,9 +59,11 @@ public class VentBlockEntity extends BlockEntity {
         VentBlockEntity entity = (VentBlockEntity) t;
         Direction dir = state.getValue(VentBlock.FACING);
         if(entity.checkTick <= 0){
-            entity.hermeticArea.bakeArea((ServerLevel) level, pos.offset(dir.getNormal()));
-            entity.checkTick = 100;
+            entity.hermeticArea.bakeArea((ServerLevel) level, pos.offset(dir.getNormal()),dir.getOpposite());
+            entity.checkTick = 60;
         }
+        entity.checkTick--;
+        if(entity.tank.isEmpty()) return;
         List<ServerPlayer> players = ((ServerLevel)level).players();
         if(entity.hermeticArea.isHermetic()&& entity.consumeOxygen(entity.hermeticArea.getArea().size()/NEOConfig.ventConsumption)) {
             for (ServerPlayer player : players) {
@@ -73,7 +75,6 @@ public class VentBlockEntity extends BlockEntity {
                 }
             }
         }
-        entity.checkTick--;
     }
 
     @Override

@@ -19,20 +19,20 @@ public class HermeticArea {
 
     public HermeticArea(){}
 
-    public boolean bakeArea(ServerLevel level, BlockPos start){
+    public boolean bakeArea(ServerLevel level, BlockPos start, Direction startDir){
 
         area.clear();
-        if(HermeticUtils.isHermetic(level, start)){
+        if(HermeticUtils.isHermetic(level, start, startDir)){
             hermetic = false;
             return false;
         }
 
         area.add(start);
 
-        List<BlockPos> oldLayer = new ArrayList<>();
-        oldLayer.add(start);
+        List<AirBlockData> oldLayer = new ArrayList<>();
+        oldLayer.add(new AirBlockData(start).setSource(startDir));
         while (area.size() < limit && !oldLayer.isEmpty()) {
-            List<BlockPos> temp = new ArrayList<>();
+            List<AirBlockData> temp = new ArrayList<>();
             for (int i = 0; i < oldLayer.size(); i++){
                 if(area.size() >= limit) break;
                 bakeNeighbors(level, oldLayer.get(i),temp);
@@ -42,13 +42,14 @@ public class HermeticArea {
         hermetic = oldLayer.isEmpty();
         return hermetic;
     }
-    public void bakeNeighbors(ServerLevel level, BlockPos pos, @Nullable List<BlockPos> temp){
+    public void bakeNeighbors(ServerLevel level, AirBlockData pos, @Nullable List<AirBlockData> temp){
         for (Direction dir : Direction.values()){
+            if(pos.isSource(dir)) continue;
             if(area.size() >= limit) return;
             BlockPos neighbor = pos.relative(dir);
-            if (!area.contains(neighbor) && !HermeticUtils.isHermetic(level, neighbor)) {
+            if (!area.contains(neighbor) && !HermeticUtils.isHermetic(level, neighbor, dir.getOpposite()) && HermeticUtils.canFlowTrough(level, pos, pos.getSource(), dir)) {
                 area.add(neighbor);
-                if(temp!=null) temp.add(neighbor);
+                if(temp!=null) temp.add(new AirBlockData(neighbor).setSource(dir.getOpposite()));
             }
         }
     }
