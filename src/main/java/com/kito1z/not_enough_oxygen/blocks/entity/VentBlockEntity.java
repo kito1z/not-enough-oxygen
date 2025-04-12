@@ -31,7 +31,7 @@ public class VentBlockEntity extends BlockEntity {
 
     private int leftTicks = 0;
     private int checkTick = 0;
-    private HermeticArea hermeticArea = new HermeticArea();
+    private final HermeticArea hermeticArea = new HermeticArea();
 
     public VentBlockEntity(BlockPos p_155229_, BlockState p_155230_) {
         super(NEOBlockEntities.VENT_BLOCK_ENTITY.get(), p_155229_, p_155230_);
@@ -69,7 +69,7 @@ public class VentBlockEntity extends BlockEntity {
                 if(!vsLogicSuccess){
                     Vec3 eyePos = player.getEyePosition();
                     BlockPos eyeBlockPos = new BlockPos((int)Math.floor(eyePos.x),(int)Math.floor(eyePos.y),(int)Math.floor(eyePos.z));
-                    if(entity.hermeticArea.getArea().contains(eyeBlockPos)) player.addEffect(new MobEffectInstance(NEOEffects.OXYGEN_SATURATION.get(), 5, 0, false, false));;
+                    if(entity.hermeticArea.getArea().contains(eyeBlockPos)) player.addEffect(new MobEffectInstance(NEOEffects.OXYGEN_SATURATION.get(), 5, 0, false, false));
                 }
             }
         }
