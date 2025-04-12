@@ -9,14 +9,6 @@ import org.joml.Vector3i;
 
 public class HermeticUtils {
 
-    public static boolean isFullHermetic(ServerLevel level, BlockPos pos){
-        BlockState state = level.getBlockState(pos);
-        return state.isCollisionShapeFullBlock(level,pos);
-    }
-    public static boolean isFullHermetic(ServerLevel level, Vector3i pos){
-        return isFullHermetic(level, new BlockPos(pos.x, pos.y, pos.z));
-    }
-
     public static boolean isHermetic(ServerLevel level, BlockPos pos, Direction dir) {
         BlockState state = level.getBlockState(pos);
         return state.isFaceSturdy(level, pos, dir);
@@ -24,7 +16,6 @@ public class HermeticUtils {
     public static boolean canFlowTrough(ServerLevel level, BlockPos pos, Direction from, Direction to){
         if(from.getOpposite()==to){
             BlockState state = level.getBlockState(pos);
-            VoxelShape shape = state.getShape(level, pos);
             Direction.Axis axis = from.getAxis();
             switch (axis){
                 case X -> {
