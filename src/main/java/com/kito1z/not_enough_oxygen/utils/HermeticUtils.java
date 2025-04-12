@@ -5,7 +5,6 @@ import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import org.joml.Vector3i;
 
 public class HermeticUtils {
 
@@ -15,7 +14,6 @@ public class HermeticUtils {
     }
     public static boolean canFlowTrough(ServerLevel level, BlockPos pos, Direction from, Direction to){
         if(from.getOpposite()==to){
-            BlockState state = level.getBlockState(pos);
             Direction.Axis axis = from.getAxis();
             switch (axis){
                 case X -> {

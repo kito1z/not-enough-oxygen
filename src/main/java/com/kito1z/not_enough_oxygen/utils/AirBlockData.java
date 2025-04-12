@@ -2,7 +2,6 @@ package com.kito1z.not_enough_oxygen.utils;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.core.Vec3i;
 
 public class AirBlockData extends BlockPos {
     private Direction source;
