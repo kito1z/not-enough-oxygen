@@ -6,13 +6,13 @@ import com.sierravanguard.beyond_oxygen.client.menu.BubbleGeneratorMenu;
 import com.sierravanguard.beyond_oxygen.registry.BOBlockEntities;
 import com.sierravanguard.beyond_oxygen.registry.BOEffects;
 import com.sierravanguard.beyond_oxygen.utils.VSCompat;
-import mekanism.common.registries.MekanismFluids;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.Connection;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.MenuProvider;
@@ -21,6 +21,9 @@ import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.material.Fluid;
+
+import com.sierravanguard.beyond_oxygen.registry.BOBlockEntities;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
@@ -29,11 +32,32 @@ import net.minecraftforge.energy.EnergyStorage;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.templates.FluidTank;
+import net.minecraftforge.registries.ForgeRegistries;
+
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class BubbleGeneratorBlockEntity extends BlockEntity implements MenuProvider {
-    private final FluidTank tank = new FluidTank(10000, fluid -> fluid.getFluid() == MekanismFluids.OXYGEN.getFluid());
+import static com.sierravanguard.beyond_oxygen.BOConfig.bubbleMaxRadius;
+
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+public class BubbleGeneratorBlockEntity extends BlockEntity implements MenuProvider{
+    private float lastSentRadius = -1f;
+
+    private final Set<Fluid> acceptedFluids = new HashSet<>();
+
+    public void loadAcceptedFluidsFromConfig(List<ResourceLocation> fluidIds) {
+        for (ResourceLocation fluidId : fluidIds) {
+            Fluid fluid = ForgeRegistries.FLUIDS.getValue(fluidId);
+            if (fluid != null) {
+                acceptedFluids.add(fluid);
+            }
+        }
+    }
+
+    private final FluidTank tank = new FluidTank(1000, fluidStack -> acceptedFluids.contains(fluidStack.getFluid()));
     private LazyOptional<FluidTank> tankLazyOptional = LazyOptional.of(() -> tank);
 
     private final EnergyStorage energyStorage = new EnergyStorage(10000);
@@ -42,10 +66,10 @@ public class BubbleGeneratorBlockEntity extends BlockEntity implements MenuProvi
     private int leftTicks = 0;
     public float currentRadius = 0.0f;
     public float maxRadius = BOConfig.bubbleMaxRadius;
-    private float lastSentRadius = -1f;
 
     public BubbleGeneratorBlockEntity(BlockPos pos, BlockState state) {
         super(BOBlockEntities.BUBBLE_GENERATOR.get(), pos, state);
+        loadAcceptedFluidsFromConfig(BOConfig.oxygenFluids);
     }
 
     public static void tick(Level level, BlockPos pos, BlockState state, BlockEntity be) {
