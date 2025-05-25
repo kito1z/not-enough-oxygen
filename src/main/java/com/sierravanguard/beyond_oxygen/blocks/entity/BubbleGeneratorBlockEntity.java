@@ -23,22 +23,17 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluid;
 
-import com.sierravanguard.beyond_oxygen.registry.BOBlockEntities;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.energy.EnergyStorage;
-import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.templates.FluidTank;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
-import static com.sierravanguard.beyond_oxygen.BOConfig.bubbleMaxRadius;
-
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -172,7 +167,7 @@ public class BubbleGeneratorBlockEntity extends BlockEntity implements MenuProvi
         if (tag.contains("radius")) currentRadius = tag.getFloat("radius");
         if (tag.contains("tankAmount")) {
             int tankAmount = tag.getInt("tankAmount");
-            tank.setFluid(new FluidStack(MekanismFluids.OXYGEN.getFluid(), tankAmount));
+            //TODO: Tank client-side logic implementation for GUI rendering.
         }
     }
 
